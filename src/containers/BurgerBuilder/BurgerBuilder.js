@@ -20,7 +20,8 @@ class BurgerBuilder extends Component {
       cheese: 0,
       meat: 0
     },
-    totalPrice: 4
+    totalPrice: 4,
+    disableOrder: true
   }
 
   addIngredientHandler = (type) => {
@@ -32,10 +33,13 @@ class BurgerBuilder extends Component {
     updateIngredients[type] = updatedCount;
     const priceAddition = INGREDIENT_PRICES[type];
     const oldPrice = this.state.totalPrice;
-    const newPrice = priceAddition + oldPrice
+    const newPrice = priceAddition + oldPrice;
+    const isReadyToOrder = this.isDisabledOrder(updateIngredients);
+
     this.setState(()=> ({
       totalPrice : newPrice,
-      ingredients : updateIngredients
+      ingredients : updateIngredients,
+      disableOrder : isReadyToOrder
     }))
   }
 
@@ -53,11 +57,25 @@ class BurgerBuilder extends Component {
 
     const priceDeduction = INGREDIENT_PRICES[type];
     const oldPrice = this.state.totalPrice;
-    const newPrice = oldPrice - priceDeduction
+    const newPrice = oldPrice - priceDeduction;
+    const isReadyToOrder = this.isDisabledOrder(updateIngredients);
+
     this.setState(()=> ({
       totalPrice : newPrice,
-      ingredients : updateIngredients
+      ingredients : updateIngredients,
+      disableOrder : isReadyToOrder
     }))
+  }
+
+  isDisabledOrder = (ingredients) => {
+    for (let key in ingredients) {
+      if (ingredients[key] > 0){
+        return false
+      }
+    }
+
+    return true
+
   }
 
 
@@ -69,7 +87,7 @@ class BurgerBuilder extends Component {
       disabledChoices[key] = disabledChoices[key] <= 0
     }
 
-    const { ingredients, totalPrice } = this.state;
+    const { ingredients, totalPrice, disableOrder } = this.state;
 
     return (
       <Aux>
@@ -78,7 +96,8 @@ class BurgerBuilder extends Component {
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
           disabledChoices={disabledChoices}
-          totalPrice={totalPrice}/>
+          totalPrice={totalPrice}
+          readyToOrder={disableOrder}/>
       </Aux>
     )
   }

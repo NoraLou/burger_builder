@@ -105,7 +105,8 @@ class BurgerBuilder extends Component {
           ingredientRemoved={this.removeIngredientHandler}
           disabledChoices={disabledChoices}
           totalPrice={totalPrice}
-          readyToOrder={disableOrder}/>
+          readyToOrder={disableOrder}
+          purchaseHandler={this.purchaseHandler}/>
         <Modal show={inPurchaseState}>
           <OrderSummary ingredients={ingredients}/>
         </Modal>

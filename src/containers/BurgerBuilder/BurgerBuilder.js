@@ -28,7 +28,6 @@ class BurgerBuilder extends Component {
   }
 
   addIngredientHandler = (type) => {
-    console.log("add Ingredient :", type)
     const oldCount = this.state.ingredients[type];
     const updatedCount = oldCount + 1;
     const updateIngredients = {
@@ -51,6 +50,16 @@ class BurgerBuilder extends Component {
       this.setState(()=> ({
         inPurchaseState : true,
     }))
+  }
+
+  purchaseCancelHandler = () => {
+     this.setState(()=> ({
+        inPurchaseState : false
+    }))
+  }
+
+  purchaseContinueHandler = () => {
+    alert('You continue!')
   }
 
   removeIngredientHandler = (type) => {
@@ -107,8 +116,12 @@ class BurgerBuilder extends Component {
           totalPrice={totalPrice}
           readyToOrder={disableOrder}
           purchaseHandler={this.purchaseHandler}/>
-        <Modal show={inPurchaseState}>
-          <OrderSummary ingredients={ingredients}/>
+        <Modal show={inPurchaseState} modalClose={this.purchaseCancelHandler}>
+          <OrderSummary
+            totalPrice={totalPrice}
+            ingredients={ingredients}
+            purchaseContinue={this.purchaseContinueHandler}
+            purchaseCancel={this.purchaseCancelHandler}/>
         </Modal>
       </Aux>
     )
